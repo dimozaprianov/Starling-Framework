@@ -23,7 +23,7 @@ package starling.animation
      *  <p>There is a default juggler available at the Starling class:</p>
      *  
      *  <pre>
-     *  var juggler:Juggler = Starling.juggler;
+     *  var juggler:Juggler = Starling.jugglerStatic;
      *  </pre>
      *  
      *  <p>You can create juggler objects yourself, just as well. That way, you can group 

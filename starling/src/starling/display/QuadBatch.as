@@ -166,7 +166,7 @@ package starling.display
 
             var numVertices:int = mVertexData.numVertices;
             var numIndices:int = mIndexData.length;
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
 
             if (numVertices == 0) return;
             if (context == null)  throw new MissingContextError();
@@ -221,7 +221,7 @@ package starling.display
             if (mSyncRequired) syncBuffers();
             
             var pma:Boolean = mVertexData.premultipliedAlpha;
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             var tinted:Boolean = mTinted || (parentAlpha != 1.0);
             
             sRenderAlpha[0] = sRenderAlpha[1] = sRenderAlpha[2] = pma ? parentAlpha : 1.0;

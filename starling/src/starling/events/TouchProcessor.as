@@ -10,6 +10,7 @@
 
 package starling.events
 {
+	import flash.display.InteractiveObject;
     import flash.geom.Point;
     import flash.utils.getDefinitionByName;
     
@@ -438,10 +439,12 @@ package starling.events
                 // dispatch events
                 processTouches(mCurrentTouches, mShiftDown, mCtrlDown);
             }
-
+			var mouseTouch:Touch = getCurrentTouch(0);
             // purge touches
             mCurrentTouches.length = 0;
-            mQueue.length = 0;
-        }
+			if (mouseTouch != null)
+				mCurrentTouches.push(mouseTouch);
+			mQueue.length = 0;
+		}
     }
 }

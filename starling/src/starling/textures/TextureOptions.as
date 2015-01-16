@@ -46,7 +46,7 @@ package starling.textures
         public function get scale():Number { return mScale; }
         public function set scale(value:Number):void
         {
-            mScale = value > 0 ? value : Starling.contentScaleFactor;
+            mScale = value > 0 ? value : Starling.contentScaleFactorStatic;
         }
         
         /** The <code>Context3DTextureFormat</code> of the underlying texture data. Only used

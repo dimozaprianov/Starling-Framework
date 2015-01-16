@@ -509,7 +509,7 @@ package starling.core
                 mStage.stageWidth, mStage.stageHeight, mStage.cameraPosition);
             
             if (!mShareContext)
-                RenderSupport.clear(mStage.color, 1.0);
+                RenderSupport.clearStatic(mStage.color, 1.0);
             
             mStage.render(mSupport, 1.0);
             mSupport.finishQuadBatch();
@@ -1068,13 +1068,13 @@ package starling.core
         public static function get all():Vector.<Starling> { return sAll; }
         
         /** The render context of the currently active Starling instance. */
-        public static function get context():Context3D { return sCurrent ? sCurrent.context : null; }
+        public static function get contextStatic():Context3D { return sCurrent ? sCurrent.context : null; }
         
         /** The default juggler of the currently active Starling instance. */
-        public static function get juggler():Juggler { return sCurrent ? sCurrent.juggler : null; }
+        public static function get jugglerStatic():Juggler { return sCurrent ? sCurrent.juggler : null; }
         
         /** The contentScaleFactor of the currently active Starling instance. */
-        public static function get contentScaleFactor():Number 
+        public static function get contentScaleFactorStatic():Number 
         {
             return sCurrent ? sCurrent.contentScaleFactor : 1.0;
         }

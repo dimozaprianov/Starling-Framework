@@ -69,7 +69,7 @@ package starling.events
         
         private function createTexture():Texture
         {
-            var scale:Number = Starling.contentScaleFactor;
+            var scale:Number = Starling.contentScaleFactorStatic;
             var radius:Number = 12 * scale;
             var width:int = 32 * scale;
             var height:int = 32 * scale;

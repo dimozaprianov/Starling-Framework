@@ -196,7 +196,7 @@ package starling.textures
          *  the current base. */
         starling_internal function createBase():void
         {
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             
             if (mBase is flash.display3D.textures.Texture)
                 mBase = context.createTexture(mWidth, mHeight, mFormat, 
@@ -213,7 +213,7 @@ package starling.textures
          *  don't call it from within a render method. */ 
         public function clear(color:uint=0x0, alpha:Number=0.0):void
         {
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             if (context == null) throw new MissingContextError();
             
             if (mPremultipliedAlpha && alpha < 1.0)
@@ -227,7 +227,7 @@ package starling.textures
             // FP 11.8 plugin/projector: calling clear on a compressed texture doesn't work there
             // (while it *does* work on iOS + Android).
             
-            try { RenderSupport.clear(color, alpha); }
+            try { RenderSupport.clearStatic(color, alpha); }
             catch (e:Error) {}
             
             context.setRenderToBackBuffer();

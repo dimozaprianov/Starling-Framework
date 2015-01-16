@@ -273,7 +273,7 @@ package starling.textures
         public static function fromAtfData(data:ByteArray, scale:Number=1, useMipMaps:Boolean=true, 
                                            async:Function=null, repeat:Boolean=false):Texture
         {
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             if (context == null) throw new MissingContextError();
             
             var atfData:AtfData = new AtfData(data);
@@ -338,11 +338,11 @@ package starling.textures
                                      mipMapping:Boolean=true, optimizeForRenderToTexture:Boolean=false,
                                      scale:Number=-1, format:String="bgra", repeat:Boolean=false):Texture
         {
-            if (scale <= 0) scale = Starling.contentScaleFactor;
+            if (scale <= 0) scale = Starling.contentScaleFactorStatic;
             
             var actualWidth:int, actualHeight:int;
             var nativeTexture:TextureBase;
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             
             if (context == null) throw new MissingContextError();
             

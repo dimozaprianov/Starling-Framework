@@ -185,7 +185,7 @@ package starling.text
                 mTextBounds = new Rectangle();
             
             var texture:Texture;
-            var scale:Number = Starling.contentScaleFactor;
+            var scale:Number = Starling.contentScaleFactorStatic;
             var bitmapData:BitmapData = renderText(scale, mTextBounds);
             var format:String = sDefaultTextureFormat;
             

@@ -363,8 +363,8 @@ package starling.core
             mRenderTarget = target;
             applyClipRect();
             
-            if (target) Starling.context.setRenderToTexture(target.base, false, antiAliasing);
-            else        Starling.context.setRenderToBackBuffer();
+            if (target) Starling.contextStatic.setRenderToTexture(target.base, false, antiAliasing);
+            else        Starling.contextStatic.setRenderToBackBuffer();
         }
         
         // clipping
@@ -411,7 +411,7 @@ package starling.core
         {
             finishQuadBatch();
             
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             if (context == null) return;
             
             if (mClipRectStackSize > 0)
@@ -555,13 +555,13 @@ package starling.core
         public static function setBlendFactors(premultipliedAlpha:Boolean, blendMode:String="normal"):void
         {
             var blendFactors:Array = BlendMode.getBlendFactors(blendMode, premultipliedAlpha); 
-            Starling.context.setBlendFactors(blendFactors[0], blendFactors[1]);
+            Starling.contextStatic.setBlendFactors(blendFactors[0], blendFactors[1]);
         }
         
         /** Clears the render context with a certain color and alpha value. */
-        public static function clear(rgb:uint=0, alpha:Number=0.0):void
+        public static function clearStatic(rgb:uint=0, alpha:Number=0.0):void
         {
-            Starling.context.clear(
+            Starling.contextStatic.clear(
                 Color.getRed(rgb)   / 255.0, 
                 Color.getGreen(rgb) / 255.0, 
                 Color.getBlue(rgb)  / 255.0,
@@ -571,7 +571,7 @@ package starling.core
         /** Clears the render context with a certain color and alpha value. */
         public function clear(rgb:uint=0, alpha:Number=0.0):void
         {
-            RenderSupport.clear(rgb, alpha);
+            RenderSupport.clearStatic(rgb, alpha);
         }
         
         /** Assembles fragment- and vertex-shaders, passed as Strings, to a Program3D. If you
@@ -582,7 +582,7 @@ package starling.core
         {
             if (resultProgram == null) 
             {
-                var context:Context3D = Starling.context;
+                var context:Context3D = Starling.contextStatic;
                 if (context == null) throw new MissingContextError();
                 resultProgram = context.createProgram();
             }

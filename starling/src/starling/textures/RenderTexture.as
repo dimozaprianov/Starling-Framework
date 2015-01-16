@@ -114,7 +114,7 @@ package starling.textures
             //
             // [Workaround]
 
-            if (scale <= 0) scale = Starling.contentScaleFactor;
+            if (scale <= 0) scale = Starling.contentScaleFactorStatic;
 
             var legalWidth:Number  = width;
             var legalHeight:Number = height;
@@ -217,7 +217,7 @@ package starling.textures
                                        matrix:Matrix=null, alpha:Number=1.0,
                                        antiAliasing:int=0):void
         {
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             if (context == null) throw new MissingContextError();
             if (!Starling.current.contextValid) return;
             
@@ -264,7 +264,7 @@ package starling.textures
          *  arguments to restore full transparency. */
         public function clear(rgb:uint=0, alpha:Number=0.0):void
         {
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             if (context == null) throw new MissingContextError();
             if (!Starling.current.contextValid) return;
             
@@ -280,7 +280,7 @@ package starling.textures
         private function get supportsNonPotDimensions():Boolean
         {
             var target:Starling = Starling.current;
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             var support:Object = target.contextData[CONTEXT_POT_SUPPORT_KEY];
 
             if (support == null)

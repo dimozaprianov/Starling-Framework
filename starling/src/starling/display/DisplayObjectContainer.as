@@ -107,6 +107,8 @@ package starling.display
         /** Adds a child to the container. It will be at the frontmost position. */
         public function addChild(child:DisplayObject):DisplayObject
         {
+			if (child._disposed)
+				throw "cannot add child!";
             addChildAt(child, numChildren);
             return child;
         }

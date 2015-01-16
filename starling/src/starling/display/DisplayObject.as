@@ -180,10 +180,12 @@ package starling.display
         
         /** Disposes all resources of the display object. 
           * GPU buffers are released, event listeners are removed, filters are disposed. */
+		public var _disposed : Boolean;
         public function dispose():void
         {
             if (mFilter) mFilter.dispose();
             removeEventListeners();
+			_disposed = true;
         }
         
         /** Removes the object from its parent, if it has one, and optionally disposes it. */
@@ -476,6 +478,8 @@ package starling.display
         /** @private */
         internal function setParent(value:DisplayObjectContainer):void 
         {
+			if (_disposed && value != null)
+				throw "cannot set new parent. already disposed!";
             // check for a recursion
             var ancestor:DisplayObject = value;
             while (ancestor != this && ancestor != null)

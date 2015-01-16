@@ -209,7 +209,7 @@ package starling.filters
         {
             var passTexture:Texture;
             var cacheTexture:Texture = null;
-            var context:Context3D = Starling.context;
+            var context:Context3D = Starling.contextStatic;
             var targetSpace:DisplayObject = object.stage;
             var stage:Stage  = Starling.current.stage;
             var scale:Number = Starling.current.contentScaleFactor;

@@ -87,7 +87,7 @@ package starling.filters
         {
             // the texture coordinates for the map texture are uploaded via a separate buffer
             if (mMapTexCoordBuffer) mMapTexCoordBuffer.dispose();
-            mMapTexCoordBuffer = Starling.context.createVertexBuffer(4, 2);
+            mMapTexCoordBuffer = Starling.contextStatic.createVertexBuffer(4, 2);
             
             var target:Starling = Starling.current;
             var mapFlags:String = RenderSupport.getTextureLookupFlags(
@@ -162,7 +162,7 @@ package starling.filters
             // matrix:
             // Maps RGBA values of map texture to UV-offsets in input texture.
 
-            var scale:Number = Starling.contentScaleFactor;
+            var scale:Number = Starling.contentScaleFactorStatic;
             var columnX:int, columnY:int;
             
             for (var i:int=0; i<16; ++i)
