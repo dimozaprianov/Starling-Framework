@@ -127,7 +127,7 @@ package starling.display
                 else
                 {
                     child.removeFromParent();
-                    
+					numChildren = mChildren.length;
                     // 'splice' creates a temporary object, so we avoid it if it's not necessary
                     if (index == numChildren) mChildren[numChildren] = child;
                     else                      mChildren.splice(index, 0, child);

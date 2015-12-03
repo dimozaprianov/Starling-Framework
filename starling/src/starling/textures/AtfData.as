@@ -21,6 +21,7 @@ package starling.textures
         private var mHeight:int;
         private var mNumTextures:int;
         private var mData:ByteArray;
+		private var mCubemap:Boolean;
         
         /** Create a new instance by parsing the given byte array. */
         public function AtfData(data:ByteArray)
@@ -30,7 +31,9 @@ package starling.textures
             if (data[6] == 255) data.position = 12; // new file version
             else                data.position =  6; // old file version
             
-            switch (data.readUnsignedByte())
+			var formatAndType : int = data.readUnsignedByte();
+			mCubemap = (formatAndType >> 7) != 0;
+            switch (formatAndType & 0x7f)
             {
                 case 0:
                 case 1: mFormat = Context3DTextureFormat.BGRA; break;
@@ -72,6 +75,8 @@ package starling.textures
         public function get width():int { return mWidth; }
         public function get height():int { return mHeight; }
         public function get numTextures():int { return mNumTextures; }
-        public function get data():ByteArray { return mData; }
+ 
+		public function get data():ByteArray { return mData; }
+		public function get cubemap():Boolean { return mCubemap; }
     }
 }

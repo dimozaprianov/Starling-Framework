@@ -3,10 +3,12 @@ package starling.utils
     import flash.display.Bitmap;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
+	import flash.events.AsyncErrorEvent;
     import flash.events.HTTPStatusEvent;
     import flash.events.IOErrorEvent;
     import flash.events.ProgressEvent;
     import flash.events.SecurityErrorEvent;
+	import flash.events.UncaughtErrorEvent;
     import flash.media.Sound;
     import flash.media.SoundChannel;
     import flash.media.SoundTransform;
@@ -822,7 +824,7 @@ package starling.utils
                 {
                     bytes = asset as ByteArray;
                     
-                    if (AtfData.isAtfData(bytes))
+                    if (AtfData.isAtfData(bytes) && name.indexOf("_cubemap") == -1)
                     {
                         options.onReady = prependCallback(options.onReady, onComplete);
                         texture = Texture.fromData(bytes, options);
