@@ -8,15 +8,15 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>false</value>
-    </define>
-    <define append="true">
-      <name>CONFIG::release</name>
       <value>true</value>
     </define>
     <define append="true">
+      <name>CONFIG::release</name>
+      <value>false</value>
+    </define>
+    <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'9/14/2015'</value>
+      <value>'10/28/2016'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>

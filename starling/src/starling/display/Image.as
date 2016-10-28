@@ -62,7 +62,7 @@ package starling.display
                 mVertexData.setTexCoords(3, 1.0, 1.0);
                 
                 mTexture = texture;
-                mSmoothing = TextureSmoothing.BILINEAR;
+                mSmoothing = TextureSmoothing.TRILINEAR;
                 mVertexDataCache = new VertexData(4, pma);
                 mVertexDataCacheInvalid = true;
             }

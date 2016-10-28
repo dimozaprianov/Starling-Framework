@@ -215,6 +215,8 @@ package starling.core
         private var mNativeStage:flash.display.Stage;
         private var mNativeOverlay:flash.display.Sprite;
         private var mNativeStageContentScaleFactor:Number;
+		
+		private var mInputProcessing:Boolean;
 
         private static var sCurrent:Starling;
         private static var sHandleLostContext:Boolean;
@@ -284,17 +286,8 @@ package starling.core
             stage.scaleMode = StageScaleMode.NO_SCALE;
             stage.align = StageAlign.TOP_LEFT;
             
-            // register touch/mouse event handlers            
-            for each (var touchEventType:String in touchEventTypes)
-                stage.addEventListener(touchEventType, onTouch, false, 0, true);
-            
-            // register other event handlers
-            stage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-            stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey, false, 0, true);
-            stage.addEventListener(KeyboardEvent.KEY_UP, onKey, false, 0, true);
-            stage.addEventListener(Event.RESIZE, onResize, false, 0, true);
-            stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
-            
+            enableProcessInput(true);
+			
             mStage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false, 10, true);
             mStage3D.addEventListener(ErrorEvent.ERROR, onStage3DError, false, 10, true);
             
@@ -318,25 +311,50 @@ package starling.core
             }
         }
         
+		public function enableProcessInput(enabled : Boolean)
+		{
+			if (mInputProcessing != enabled)
+			{
+				if (enabled)
+				{
+					// register touch/mouse event handlers            
+					for each (var touchEventType:String in touchEventTypes)
+						mNativeStage.addEventListener(touchEventType, onTouch, false, 0, true);
+					
+					// register other event handlers
+					mNativeStage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+					mNativeStage.addEventListener(KeyboardEvent.KEY_DOWN, onKey, false, 0, true);
+					mNativeStage.addEventListener(KeyboardEvent.KEY_UP, onKey, false, 0, true);
+					mNativeStage.addEventListener(Event.RESIZE, onResize, false, 0, true);
+					mNativeStage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave, false, 0, true);
+				} else
+				{
+					for each (var touchEventType:String in touchEventTypes)
+						mNativeStage.removeEventListener(touchEventType, onTouch, false);
+
+					mNativeStage.removeEventListener(Event.ENTER_FRAME, onEnterFrame, false);
+					mNativeStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKey, false);
+					mNativeStage.removeEventListener(KeyboardEvent.KEY_UP, onKey, false);
+					mNativeStage.removeEventListener(Event.RESIZE, onResize, false);
+					mNativeStage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeave, false);
+				}
+				mInputProcessing = enabled;
+			}
+		}
+		
         /** Disposes all children of the stage and the render context; removes all registered
          *  event listeners. */
         public function dispose():void
         {
             stop(true);
+			
+			enableProcessInput(false);
 
-            mNativeStage.removeEventListener(Event.ENTER_FRAME, onEnterFrame, false);
-            mNativeStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKey, false);
-            mNativeStage.removeEventListener(KeyboardEvent.KEY_UP, onKey, false);
-            mNativeStage.removeEventListener(Event.RESIZE, onResize, false);
-            mNativeStage.removeEventListener(Event.MOUSE_LEAVE, onMouseLeave, false);
             mNativeStage.removeChild(mNativeOverlay);
             
             mStage3D.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false);
             mStage3D.removeEventListener(ErrorEvent.ERROR, onStage3DError, false);
-            
-            for each (var touchEventType:String in touchEventTypes)
-                mNativeStage.removeEventListener(touchEventType, onTouch, false);
-            
+                        
             if (mStage) mStage.dispose();
             if (mSupport) mSupport.dispose();
             if (mTouchProcessor) mTouchProcessor.dispose();
