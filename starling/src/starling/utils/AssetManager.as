@@ -137,6 +137,8 @@ package starling.utils
         /** Regex for name / extension extraction from URL. */
         private static const NAME_REGEX:RegExp = /([^\?\/\\]+?)(?:\.([\w\-]+))?(?:\?.*)?$/;
 
+		public var outOfMemoryHandler : Function;
+		
         /** Create a new AssetManager. The 'scaleFactor' and 'useMipmaps' parameters define
          *  how enqueued bitmaps will be converted to textures. */
         public function AssetManager(scaleFactor:Number=1, useMipmaps:Boolean=false)
@@ -827,7 +829,19 @@ package starling.utils
                     if (AtfData.isAtfData(bytes) && name.indexOf("_cubemap") == -1)
                     {
                         options.onReady = prependCallback(options.onReady, onComplete);
-                        texture = Texture.fromData(bytes, options);
+						while (true)
+						{
+							try 
+							{
+								texture = Texture.fromData(bytes, options);
+								break;
+							}
+							catch (err : Error)
+							{
+								var data : AtfData = new AtfData(bytes);
+								outOfMemoryHandler(data);
+							}
+						}
                         texture.root.onRestore = function():void
                         {
                             mNumLostTextures++;
