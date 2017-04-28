@@ -939,13 +939,25 @@ package starling.utils
             var urlLoader:URLLoader = null;
             var url:String = null;
             
-            if (rawAsset is Class)
+			
+            if (rawAsset != null && rawAsset is IAssetDataSource)
+			{
+				var dataSource: IAssetDataSource = rawAsset as IAssetDataSource;
+				
+				url = dataSource.GetPath();
+				extension = getExtensionFromUrl(url);
+				var asset: ByteArray = dataSource.LoadData();
+				
+				completedWithData(asset);
+			}
+			else if (rawAsset is Class)
             {
                 setTimeout(complete, 1, new rawAsset());
             }
             else if (rawAsset is String)
             {
                 url = rawAsset as String;
+				
                 extension = getExtensionFromUrl(url);
                 
                 urlLoader = new URLLoader();
@@ -993,9 +1005,14 @@ package starling.utils
             function onUrlLoaderComplete(event:Object):void
             {
                 var bytes:ByteArray = transformData(urlLoader.data as ByteArray, url);
-                var sound:Sound;
-                
-                if (extension)
+                completedWithData(bytes);
+            }
+			
+			function completedWithData(bytes: ByteArray):void
+			{
+				var sound:Sound;
+				
+				if (extension)
                     extension = extension.toLowerCase();
 
                 switch (extension)
@@ -1023,11 +1040,13 @@ package starling.utils
                         complete(bytes);
                         break;
                 }
-            }
+			}
+			
             
             function onLoaderComplete(event:Object):void
             {
-                urlLoader.data.clear();
+				if(urlLoader != null)
+					urlLoader.data.clear();
                 complete(event.target.content);
             }
             
