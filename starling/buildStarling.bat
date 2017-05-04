@@ -1,0 +1,1 @@
+compc -source-path+=src -include-sources+=src -output bin/starling.swc
