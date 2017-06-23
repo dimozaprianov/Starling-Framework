@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <flex-config xmlns="http://www.adobe.com/2006/flex-config">
-  <output>c:\Spellweaver\FlashClient\lib\starling\Starling.swc</output>
+  <output>D:\Spellweaver\FlashClient\lib\starling\Starling.swc</output>
   <use-network>true</use-network>
   <target-player>11.6</target-player>
   <warnings>true</warnings>
@@ -8,15 +8,15 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>true</value>
-    </define>
-    <define append="true">
-      <name>CONFIG::release</name>
       <value>false</value>
     </define>
     <define append="true">
+      <name>CONFIG::release</name>
+      <value>true</value>
+    </define>
+    <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'10/28/2016'</value>
+      <value>'6/23/2017'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -41,7 +41,7 @@
     <use-resource-bundle-metadata>true</use-resource-bundle-metadata>
     <verbose-stacktraces>false</verbose-stacktraces>
     <source-path append="true">
-      <path-element>c:\users\dimo_2\documents\github\starling-framework\starling\src</path-element>
+      <path-element>d:\starling-framework\starling\src</path-element>
     </source-path>
   </compiler>
   <include-classes>
@@ -102,10 +102,13 @@
     <class>starling.utils.cleanMasterString</class>
     <class>starling.utils.Color</class>
     <class>starling.utils.deg2rad</class>
+    <class>starling.utils.DictUsingArray</class>
     <class>starling.utils.execute</class>
     <class>starling.utils.formatString</class>
     <class>starling.utils.getNextPowerOfTwo</class>
     <class>starling.utils.HAlign</class>
+    <class>starling.utils.IAssetDataSource</class>
+    <class>starling.utils.KeyValuePair</class>
     <class>starling.utils.MathUtil</class>
     <class>starling.utils.MatrixUtil</class>
     <class>starling.utils.rad2deg</class>
