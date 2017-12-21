@@ -839,7 +839,7 @@ package starling.utils
 							catch (err : Error)
 							{
 								var data : AtfData = new AtfData(bytes);
-								outOfMemoryHandler(data);
+								outOfMemoryHandler(err, data);
 							}
 						}
                         texture.root.onRestore = function():void
