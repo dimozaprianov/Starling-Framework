@@ -128,7 +128,7 @@ package starling.textures
          *                  with ATF data.
          *  @param options  Specifies options about the texture settings, e.g. scale factor.
          */
-        public static function fromData(data:Object, options:TextureOptions=null):Texture
+        public static function fromData(data:Object, options:TextureOptions=null, emulateAsync: Boolean = false):Texture
         {
             var texture:Texture = null;
             
@@ -150,7 +150,7 @@ package starling.textures
             else if (data is ByteArray)
             {
                 texture = fromAtfData(data as ByteArray,
-                    options.scale, options.mipMapping, options.onReady, options.repeat);
+                    options.scale, options.mipMapping, options.onReady, options.repeat, emulateAsync);
             }
             else
                 throw new ArgumentError("Unsupported 'data' type: " + getQualifiedClassName(data));
@@ -271,7 +271,7 @@ package starling.textures
          *  asynchronously. It can only be used when the callback has been executed. This is the
          *  expected function definition: <code>function(texture:Texture):void;</code></p> */
         public static function fromAtfData(data:ByteArray, scale:Number=1, useMipMaps:Boolean=true, 
-                                           async:Function=null, repeat:Boolean=false):Texture
+                                           async:Function=null, repeat:Boolean=false, emulateAsync: Boolean = false):Texture
         {
             var context:Context3D = Starling.contextStatic;
             if (context == null) throw new MissingContextError();
@@ -282,8 +282,17 @@ package starling.textures
             var concreteTexture:ConcreteTexture = new ConcreteTexture(nativeTexture, atfData.format, 
                 atfData.width, atfData.height, useMipMaps && atfData.numTextures > 1, 
                 false, false, scale, repeat);
-            
-            concreteTexture.uploadAtfData(data, 0, async);
+           
+			if (emulateAsync)
+			{
+				concreteTexture.uploadAtfData(data, 0, false);
+				if (async != null) {
+					async();
+				}
+			} else {
+				concreteTexture.uploadAtfData(data, 0, async);
+			}
+			
             concreteTexture.onRestore = function():void
             {
                 concreteTexture.uploadAtfData(data, 0);

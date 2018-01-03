@@ -130,6 +130,7 @@ package starling.utils
         private var mXmls:Dictionary;
         private var mObjects:Dictionary;
         private var mByteArrays:Dictionary;
+		public var emulateAsyncATFLoads: Boolean;
         
         /** helper objects */
         private static var sNames:Vector.<String> = new <String>[];
@@ -153,6 +154,7 @@ package starling.utils
             mNumConnections = 3;
             mVerbose = true;
             mQueue = [];
+			emulateAsyncATFLoads = false;
         }
         
         /** Disposes all contained textures. */
@@ -833,7 +835,7 @@ package starling.utils
 						{
 							try 
 							{
-								texture = Texture.fromData(bytes, options);
+								texture = Texture.fromData(bytes, options, emulateAsyncATFLoads);
 								break;
 							}
 							catch (err : Error)
