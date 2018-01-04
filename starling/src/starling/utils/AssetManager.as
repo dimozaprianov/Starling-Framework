@@ -830,7 +830,15 @@ package starling.utils
                     
                     if (AtfData.isAtfData(bytes) && name.indexOf("_cubemap") == -1)
                     {
-                        options.onReady = prependCallback(options.onReady, onComplete);
+						var onCompleteCalled: Boolean = false;
+						var toCallOnReady: Function = prependCallback(options.onReady, onComplete);
+						var toCallWhenProbablyReady: Function = function() {
+							//log('On complete ' + onCompleteCalled);
+							if (onCompleteCalled) { return; }
+							onCompleteCalled = true;
+							toCallOnReady();
+						};
+                        options.onReady = toCallWhenProbablyReady;
 						while (true)
 						{
 							try 
@@ -846,10 +854,11 @@ package starling.utils
 						}
                         texture.root.onRestore = function():void
                         {
+							//log('On restore');
                             mNumLostTextures++;
                             loadRawAsset(rawAsset, null, function(asset:Object):void
                             {
-                                try { texture.root.uploadAtfData(asset as ByteArray, 0, true); }
+                                try { texture.root.uploadAtfData(asset as ByteArray, 0, toCallWhenProbablyReady); }
                                 catch (e:Error) { log("Texture restoration failed: " + e.message); }
                                 
                                 asset.clear();
