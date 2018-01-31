@@ -13,6 +13,7 @@ package starling.textures
     import flash.display.Bitmap;
     import flash.display.BitmapData;
     import flash.display3D.Context3D;
+	import flash.display3D.textures.RectangleTexture;
     import flash.display3D.textures.TextureBase;
     import flash.geom.Matrix;
     import flash.geom.Point;
@@ -42,10 +43,41 @@ package starling.textures
         private var mRepeat:Boolean;
         private var mOnRestore:Function;
         private var mDataUploaded:Boolean;
-        
+		
         /** helper object */
         private static var sOrigin:Point = new Point();
         
+		private var applyMipMap: Boolean = false;
+		private function estimateSizeInBytes():Number 
+		{
+			var formatFactor: Number = 1.0;
+			//dxt5 -> 16 pixels to 64bits, dxt1 -> 16 pixels to 8 bits
+			if (format == "compressedAlpha")
+			{
+				formatFactor = 1;
+			}else if (format == "compressed")
+			{
+				formatFactor = 0.5;
+			}else if (format == "bgrPacked565" || format == "bgraPacked4444")
+			{
+				formatFactor = 2;
+			}else if (format == "bgra")
+			{
+				formatFactor = 4;
+			}
+			if (applyMipMap)
+			{
+				formatFactor *= 1.5;
+			}
+			return mWidth * mHeight * formatFactor;
+		}
+		
+		private static var sTotalTextureSize: Number = 0;
+		public static function totalTextureMemory()
+		{
+			return sTotalTextureSize;
+		}
+		
         /** Creates a ConcreteTexture object from a TextureBase, storing information about size,
          *  mip-mapping, and if the channels contain premultiplied alpha values. */
         public function ConcreteTexture(base:TextureBase, format:String, width:int, height:int, 
@@ -64,12 +96,31 @@ package starling.textures
             mRepeat = repeat;
             mOnRestore = null;
             mDataUploaded = false;
+			knownTextureSize = -1;
+			
+			if (mBase is flash.display3D.textures.Texture)
+			{
+				applyMipMap = true;
+				sTotalTextureSize += estimateSizeInBytes();
+			}
+			else if (mBase is RectangleTexture) {
+				applyMipMap = false;
+				sTotalTextureSize += estimateSizeInBytes();
+			}else {
+				trace('unknown type base tex');	
+			}
         }
-        
+		
         /** Disposes the TextureBase object. */
         public override function dispose():void
         {
-            if (mBase) mBase.dispose();
+            if (mBase) {
+				mBase.dispose();
+				if (mBase is flash.display3D.textures.Texture || mBase is RectangleTexture)
+				{
+					sTotalTextureSize -= estimateSizeInBytes();
+				}
+			}
             this.onRestore = null; // removes event listener 
             super.dispose();
         }
