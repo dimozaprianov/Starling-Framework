@@ -852,21 +852,31 @@ package starling.utils
 								outOfMemoryHandler(err, data);
 							}
 						}
+						
+						
                         texture.root.onRestore = function():void
                         {
-							//log('On restore');
-                            mNumLostTextures++;
+							mNumLostTextures++;
                             loadRawAsset(rawAsset, null, function(asset:Object):void
                             {
-                                try { texture.root.uploadAtfData(asset as ByteArray, 0, toCallWhenProbablyReady); }
-                                catch (e:Error) { log("Texture restoration failed: " + e.message); }
+                                try
+                                {
+                                    if (asset == null) throw new Error("Reload failed");
+                                    texture.root.uploadAtfData(asset as ByteArray, 0, false);
+                                    asset.clear();
+                                }
+                                catch (e:Error)
+                                {
+                                    log("Texture restoration failed for '" + name + "': " + e.message);
+                                }
                                 
-                                asset.clear();
+								toCallWhenProbablyReady();
+								
                                 mNumRestoredTextures++;
-                                
+								
                                 if (mNumLostTextures == mNumRestoredTextures)
                                     dispatchEventWith(Event.TEXTURES_RESTORED);
-                            });
+							});
                         };
                         
                         bytes.clear();
@@ -957,9 +967,11 @@ package starling.utils
 				
 				url = dataSource.GetPath();
 				extension = getExtensionFromUrl(url);
-				var asset: ByteArray = dataSource.LoadData();
 				
-				completedWithData(asset);
+				setTimeout(function() {
+					var asset: ByteArray = dataSource.LoadData();
+					completedWithData(asset);
+				}, 1);
 			}
 			else if (rawAsset is Class)
             {

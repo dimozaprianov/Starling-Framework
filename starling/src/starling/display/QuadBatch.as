@@ -106,14 +106,14 @@ package starling.display
             // Handle lost context. We use the conventional event here (not the one from Starling)
             // so we're able to create a weak event listener; this avoids memory leaks when people 
             // forget to call "dispose" on the QuadBatch.
-            Starling.current.stage3D.addEventListener(Event.CONTEXT3D_CREATE, 
-                                                      onContextCreated, false, 0, true);
+            Starling.current.addEventListener(Event.CONTEXT3D_CREATE, 
+                                                      onContextCreated);
         }
         
         /** Disposes vertex- and index-buffer. */
         public override function dispose():void
         {
-            Starling.current.stage3D.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+            Starling.current.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
             destroyBuffers();
             
             mVertexData.numVertices = 0;

@@ -150,14 +150,14 @@ package starling.filters
             
             // Handle lost context. By using the conventional event, we can make it weak; this  
             // avoids memory leaks when people forget to call "dispose" on the filter.
-            Starling.current.stage3D.addEventListener(Event.CONTEXT3D_CREATE, 
-                onContextCreated, false, 0, true);
+            Starling.current.addEventListener(Event.CONTEXT3D_CREATE, 
+                onContextCreated);
         }
         
         /** Disposes the filter (programs, buffers, textures). */
         public function dispose():void
         {
-            Starling.current.stage3D.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
+            Starling.current.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
             if (mVertexBuffer) mVertexBuffer.dispose();
             if (mIndexBuffer)  mIndexBuffer.dispose();
             disposePassTextures();

@@ -96,7 +96,6 @@ package starling.textures
             mRepeat = repeat;
             mOnRestore = null;
             mDataUploaded = false;
-			knownTextureSize = -1;
 			
 			if (mBase is flash.display3D.textures.Texture)
 			{

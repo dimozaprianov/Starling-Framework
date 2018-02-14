@@ -436,7 +436,7 @@ package starling.core
             }
         }
         
-        private function initialize():void
+        public function initialize():void
         {
             makeCurrent();
             
