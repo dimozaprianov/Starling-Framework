@@ -22,6 +22,7 @@ package starling.textures
         private var mOptimizeForRenderToTexture:Boolean = false;
         private var mOnReady:Function = null;
         private var mRepeat:Boolean = false;
+		public var keepInMemory: Boolean = false;
         
         public function TextureOptions(scale:Number=1.0, mipMapping:Boolean=false, 
                                        format:String="bgra", repeat:Boolean=false)
@@ -38,6 +39,7 @@ package starling.textures
             var clone:TextureOptions = new TextureOptions(mScale, mMipMapping, mFormat, mRepeat);
             clone.mOptimizeForRenderToTexture = mOptimizeForRenderToTexture;
             clone.mOnReady = mOnReady;
+			clone.keepInMemory = keepInMemory;
             return clone;
         }
 

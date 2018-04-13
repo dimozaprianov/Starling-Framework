@@ -388,6 +388,9 @@ package starling.utils
                 mTextures[name].dispose();
             
             delete mTextures[name];
+			
+			if(dispose)
+				removeByteArray(name, dispose);
         }
         
         /** Removes a certain texture atlas, optionally disposing it. */
@@ -399,6 +402,9 @@ package starling.utils
                 mAtlases[name].dispose();
             
             delete mAtlases[name];
+			
+			if(dispose)
+				removeByteArray(name, dispose);
         }
         
         /** Removes a certain sound. */
@@ -857,13 +863,20 @@ package starling.utils
                         texture.root.onRestore = function():void
                         {
 							mNumLostTextures++;
-                            loadRawAsset(rawAsset, null, function(asset:Object):void
+							
+							var restoreWithDataFunction = function(asset:Object, hit: Boolean):void
                             {
+								if (hit)
+								{
+									log('Restoring in-memory atf.');
+								}
                                 try
                                 {
                                     if (asset == null) throw new Error("Reload failed");
+									trace('Restoring ' + name);
                                     texture.root.uploadAtfData(asset as ByteArray, 0, false);
-                                    asset.clear();
+									if(!options.keepInMemory)
+										asset.clear();
                                 }
                                 catch (e:Error)
                                 {
@@ -876,10 +889,24 @@ package starling.utils
 								
                                 if (mNumLostTextures == mNumRestoredTextures)
                                     dispatchEventWith(Event.TEXTURES_RESTORED);
-							});
+							};
+							
+							var asset = getByteArray(name);
+							if (asset != null)
+							{
+								setTimeout(restoreWithDataFunction, 1, asset, true);
+							}else {								
+								loadRawAsset(rawAsset, null, function(asset: Object) { restoreWithDataFunction(asset, false); } );
+							}
                         };
                         
-                        bytes.clear();
+												
+						if (options.keepInMemory)
+						{
+							addByteArray(name, bytes);
+						}else {
+							bytes.clear();
+						}
                         addTexture(name, texture);
                     }
                     else if (byteArrayStartsWith(bytes, "{") || byteArrayStartsWith(bytes, "["))
