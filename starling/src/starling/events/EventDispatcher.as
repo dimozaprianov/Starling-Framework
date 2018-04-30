@@ -90,6 +90,38 @@ package starling.events
             }
         }
         
+		public function removeEventListenerWithFeedback(type:String, listener:Function):Boolean
+        {
+            if (mEventListeners)
+            {
+                var listeners:Array = mEventListeners.getValue(type) as Array;
+                var numListeners:int = listeners ? listeners.length : 0;
+
+                if (numListeners > 0)
+                {
+                    // we must not modify the original vector, but work on a copy.
+                    // (see comment in 'invokeEvent')
+
+                    var index:int = 0;
+                    var restListeners:Array = [];
+
+                    for (var i:int=0; i<numListeners; ++i)
+                    {
+                        var otherListener:Function = listeners[i];
+                        if (otherListener != listener) restListeners[int(index++)] = otherListener;
+                    }
+
+					if (restListeners.length == 0)
+						mEventListeners.deleteValue(type);
+					else
+						mEventListeners.setValue(type, restListeners);
+						
+					return restListeners.length < numListeners;
+                }
+            }
+			return false;
+        }
+		
         /** Removes all event listeners with a certain type, or all of them if type is null. 
          *  Be careful when removing all event listeners: you never know who else was listening. */
         public function removeEventListeners(type:String=null):void

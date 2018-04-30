@@ -105,7 +105,7 @@ package starling.textures
 			else if (mBase is RectangleTexture) {
 				applyMipMap = false;
 				sTotalTextureSize += estimateSizeInBytes();
-			}else {
+			} else {
 				trace('unknown type base tex');	
 			}
         }
@@ -229,12 +229,17 @@ package starling.textures
         }
         
         // texture backup (context loss)
-        
+        public static var onFailedRestore: Function;
         private function onContextCreated():void
         {
             // recreate the underlying texture & restore contents
             createBase();
-            mOnRestore();
+			if (mOnRestore == null)
+			{
+				onFailedRestore(this);
+			}else {				
+				mOnRestore();
+			}
             
             // if no texture has been uploaded above, we init the texture with transparent pixels.
             if (!mDataUploaded) clear();
@@ -296,8 +301,12 @@ package starling.textures
         public function get onRestore():Function { return mOnRestore; }
         public function set onRestore(value:Function):void
         {
-            Starling.current.removeEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
-            
+            var removed: Boolean = Starling.current.removeEventListenerWithFeedback(Event.CONTEXT3D_CREATE, onContextCreated);
+            if (!removed && mOnRestore != null || removed && mOnRestore == null)
+			{
+				onFailedRestore(this);
+			}
+			
             if (Starling.handleLostContext && value != null)
             {
                 mOnRestore = value;
